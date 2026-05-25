@@ -7,41 +7,25 @@
   <title>Zur Goldenen Gabel – Speisekarte</title>
 
   <style>
-    /* ============================================================
-       DESIGN TOKENS
-       Alle Farben geprüft auf WCAG 2.2 AAA (7:1 für Text)
-
-       KORREKTUREN gegenüber vorheriger Version:
-       --accent:      #AD7B28 → #5C3D08  (war 4.1:1, jetzt 9.5:1 ✓ AAA)
-       --text-muted:  #5C5752 → #3D3935  (war 6.3:1, jetzt 11:1  ✓ AAA)
-       rgba()-Farben im Header → Volltonfarben              ✓ AAA
-    ============================================================ */
     :root {
       --bg:           #FAF7F0;
       --surface:      #F0EAE0;
       --surface-2:    #E8DFD0;
       --primary:      #12261B;
       --primary-mid:  #204330;
-      --accent:       #5C3D08;   /* Dunkelamber — 9.5:1 auf --bg ✓ */
-      --text:         #1A1A1A;   /* 16.3:1 auf --bg ✓ */
-      --text-muted:   #3D3935;   /* 11.0:1 auf --bg ✓ */
+      --accent:       #5C3D08;
+      --text:         #1A1A1A;
+      --text-muted:   #3D3935;
       --border:       #D8D0C4;
       --focus:        #0055CC;
-      --shadow:       0 2px 10px rgba(0,0,0,0.08);
-
-      /* Header-Sekundärtexte als Volltonfarben (ersetzt rgba) */
-      --header-muted: #BDC9C3;   /* 9.8:1 auf --primary ✓ */
-      --header-link:  #D0DDD7;   /* 11.8:1 auf --primary ✓ */
-
+      --header-muted: #BDC9C3;
+      --header-link:  #D0DDD7;
       --vegan-bg:     #1A5730;
       --veg-bg:       #2E5C1A;
       --gf-bg:        #5C3A12;
       --badge-text:   #FFFFFF;
     }
 
-    /* ============================================================
-       HOHER KONTRAST — alle Paare ≥ 12:1
-    ============================================================ */
     [data-theme="high-contrast"] {
       --bg:           #000000;
       --surface:      #0D0D0D;
@@ -53,7 +37,6 @@
       --text-muted:   #DDDDDD;
       --border:       #FFFFFF;
       --focus:        #FFD700;
-      --shadow:       none;
       --header-muted: #DDDDDD;
       --header-link:  #FFD700;
       --vegan-bg:     #00CC44;
@@ -62,16 +45,11 @@
       --badge-text:   #000000;
     }
 
-    /* ============================================================
-       SCHRIFTGRÖSSE
-    ============================================================ */
+    /* Normal 16px (100%) · Gross 20px (125%) · Sehr gross 32px (200%) */
     [data-textsize="medium"] { font-size: 16px; }
     [data-textsize="large"]  { font-size: 20px; }
-    [data-textsize="xlarge"] { font-size: 24px; }
+    [data-textsize="xlarge"] { font-size: 32px; }
 
-    /* ============================================================
-       REDUZIERTE BEWEGUNG
-    ============================================================ */
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after {
         animation-duration: 0.01ms !important;
@@ -79,9 +57,6 @@
       }
     }
 
-    /* ============================================================
-       BASIS
-    ============================================================ */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     [hidden] { display: none !important; }
 
@@ -97,9 +72,6 @@
     p { margin-bottom: 0.75em; }
     p:last-child { margin-bottom: 0; }
 
-    /* ============================================================
-       BARRIEREFREIHEITS-HILFSMITTEL
-    ============================================================ */
     .sr-only {
       position: absolute;
       width: 1px; height: 1px;
@@ -110,7 +82,6 @@
       border: 0;
     }
 
-    /* Sprunglink — erscheint bei Tastaturfokus */
     .skip-link {
       position: absolute;
       top: -100%;
@@ -135,14 +106,22 @@
     }
 
     /* ============================================================
-       KOPFBEREICH
-       KORREKTUR: rgba()-Farben durch Volltonfarben ersetzt
-       damit WAVE korrekte Kontrastverhältnisse messen kann
+       HAUPTHEADER
+       Zwei Zustände:
+         Standard (.site-header)  — Logo links, Restaurantname +
+                                    Adresse + Steuerung rechts
+         Kompakt  (.is-compact)   — Logo links, nur Steuerung rechts
+                                    Restaurantname ausgeblendet
+       Übergang wird per JS beim Scrollen ausgelöst.
     ============================================================ */
     .site-header {
       background: var(--primary);
       color: #fff;
-      padding: 1.5rem 1rem 1.75rem;
+      position: sticky;
+      top: 0;
+      z-index: 500;
+      padding: 1rem 1rem;
+      transition: padding 0.2s ease;
     }
 
     [data-theme="high-contrast"] .site-header {
@@ -150,67 +129,119 @@
       border-bottom: 2px solid #FFD700;
     }
 
+    /* Horizontale Zeile: Logo | rechte Spalte */
     .header-inner {
       max-width: 880px;
       margin: 0 auto;
       display: flex;
-      flex-wrap: wrap;
-      gap: 1.5rem;
-      justify-content: space-between;
       align-items: flex-start;
+      gap: 0.875rem;
+      transition: align-items 0.2s ease;
+    }
+
+    /* Im Kompakt-Modus vertikal zentriert */
+    .is-compact .header-inner {
+      align-items: center;
+    }
+
+    /* Logo — quadratisches Bild, aria-label="Home" */
+    .header-logo {
+      flex-shrink: 0;
+      width: 56px;
+      height: 56px;
+      border-radius: 8px;
+      overflow: hidden;
+      display: block;
+      transition: width 0.2s ease, height 0.2s ease;
+    }
+
+    .is-compact .header-logo {
+      width: 40px;
+      height: 40px;
+    }
+
+    .header-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Rechte Spalte: Restaurantname + Steuerung untereinander */
+    .header-right {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.875rem;
+    }
+
+    /* Restaurantname, Tag, Adresse */
+    .brand-text {
+      display: block;
+      /* Höhe animieren beim Ausblenden */
+      overflow: hidden;
+      transition: opacity 0.15s ease, max-height 0.2s ease;
+      max-height: 120px;
+      opacity: 1;
+    }
+
+    /* Im Kompakt-Modus: Restaurantname ausblenden */
+    .is-compact .brand-text {
+      max-height: 0;
+      opacity: 0;
+      pointer-events: none;
+      margin: 0;
     }
 
     .brand-name {
       font-weight: 700;
-      font-size: clamp(1.75rem, 5vw, 2.6rem);
+      font-size: clamp(1.5rem, 4vw, 2.25rem);
       line-height: 1.15;
-      color: #FFFFFF;   /* 21:1 auf --primary ✓ */
+      color: #FFFFFF;
     }
 
     .brand-tag {
-      font-size: 0.75rem;
-      letter-spacing: 0.18em;
+      font-size: 0.6875rem;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
-      color: var(--header-muted);   /* WAS rgba(255,255,255,0.65) → jetzt 9.8:1 ✓ */
-      margin-top: 0.25rem;
+      color: var(--header-muted);
+      margin-top: 0.2rem;
     }
 
     .brand-address {
       font-size: 0.8125rem;
-      color: var(--header-muted);   /* WAS rgba(255,255,255,0.55) → jetzt 9.8:1 ✓ */
-      margin-top: 0.4rem;
+      color: var(--header-muted);
+      margin-top: 0.3rem;
       font-style: normal;
-      line-height: 1.5;
+      line-height: 1.4;
     }
 
     .brand-address a {
-      color: var(--header-link);    /* WAS rgba(255,255,255,0.7) → jetzt 11.8:1 ✓ */
+      color: var(--header-link);
       text-underline-offset: 3px;
     }
     .brand-address a:hover { color: #fff; }
 
-    /* ============================================================
-       BARRIEREFREIHEITSSTEUERUNG im Kopfbereich
-       Sprachauswahl entfernt — nur noch Kontrast und Schriftgrösse
-    ============================================================ */
+    /* Steuerungszeile — Kontrast + Schriftgrösse */
     .a11y-controls {
       display: flex;
       flex-wrap: wrap;
-      gap: 1rem;
+      gap: 0.75rem;
       align-items: flex-start;
     }
 
     .ctrl-group {
       display: flex;
       flex-direction: column;
-      gap: 0.35rem;
+      gap: 0.25rem;
     }
 
     .ctrl-label {
-      font-size: 0.6875rem;
+      font-size: 0.625rem;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: var(--header-muted);   /* WAS rgba(255,255,255,0.5) → jetzt 9.8:1 ✓ */
+      color: var(--header-muted);
+      font-weight: 600;
     }
 
     .ctrl-row { display: flex; gap: 0.25rem; }
@@ -220,8 +251,8 @@
       border: 1.5px solid rgba(255,255,255,0.28);
       color: #fff;
       font-family: inherit;
-      font-size: 0.875rem;
-      padding: 0.5rem 0.875rem;
+      font-size: 0.8125rem;
+      padding: 0.4rem 0.75rem;
       min-width: 44px;
       min-height: 44px;
       cursor: pointer;
@@ -229,6 +260,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      gap: 0.35rem;
       transition: background 0.15s ease;
       white-space: nowrap;
     }
@@ -248,6 +280,13 @@
       border-color: #FFD700;
     }
 
+    .contrast-icon { width: 14px; height: 14px; flex-shrink: 0; }
+
+    /* Visuelle A-Grössenunterschiede */
+    .size-a-normal { font-size: 0.8125rem; font-weight: 700; }
+    .size-a-large  { font-size: 1.05rem;   font-weight: 700; }
+    .size-a-xlarge { font-size: 1.4rem;    font-weight: 700; }
+
     /* ============================================================
        HINWEISBANNER
     ============================================================ */
@@ -256,14 +295,13 @@
       color: #FFFFFF;
       font-size: 0.8125rem;
       text-align: center;
-      padding: 0.625rem 1rem;
+      padding: 0.5rem 1rem;
       line-height: 1.5;
     }
 
     [data-theme="high-contrast"] .a11y-notice {
       background: #111;
       border-bottom: 1px solid #fff;
-      color: #fff;
     }
 
     /* ============================================================
@@ -272,7 +310,7 @@
     .main-wrap {
       max-width: 880px;
       margin: 0 auto;
-      padding: 2rem 1rem 8rem;
+      padding: 2rem 1rem 6rem;
     }
 
     /* ============================================================
@@ -283,7 +321,6 @@
       flex-wrap: wrap;
       gap: 0.5rem;
       margin-bottom: 1.75rem;
-      align-items: center;
     }
 
     .jump-link {
@@ -312,8 +349,6 @@
 
     /* ============================================================
        FILTERBEREICH
-       KORREKTUR: filter-panel-title mit aria-hidden entfernt
-       (WAVE-Alert: sichtbarer Text vor Screenreader versteckt)
     ============================================================ */
     .filter-panel {
       background: var(--surface);
@@ -323,18 +358,11 @@
       margin-bottom: 2rem;
     }
 
-    .filter-rows {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1.25rem;
-    }
+    .filter-rows { display: flex; flex-wrap: wrap; gap: 1.25rem; }
 
     .filter-group {
-      border: none;
-      padding: 0;
-      margin: 0;
-      flex: 1;
-      min-width: 220px;
+      border: none; padding: 0; margin: 0;
+      flex: 1; min-width: 220px;
     }
 
     .filter-legend {
@@ -342,23 +370,16 @@
       font-weight: 700;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: var(--text-muted);   /* jetzt 11:1 auf --surface ✓ */
+      color: var(--text-muted);
       display: block;
       margin-bottom: 0.6rem;
     }
 
-    .filter-options {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-    }
+    .filter-options { display: flex; flex-wrap: wrap; gap: 0.4rem; }
 
     .filter-option input[type="radio"],
     .filter-option input[type="checkbox"] {
-      position: absolute;
-      opacity: 0;
-      width: 0;
-      height: 0;
+      position: absolute; opacity: 0; width: 0; height: 0;
     }
 
     .filter-option { display: flex; align-items: center; cursor: pointer; }
@@ -431,17 +452,7 @@
     }
 
     /* ============================================================
-       MENÜKARTEN
-       KORREKTUR: Reihenfolge im DOM jetzt:
-         1. Bild (oben, volle Breite)
-         2. Name (h3)
-         3. Preis (eigene Zeile — nicht flex-beside name)
-         4. Untertitel
-         5. Beschreibung
-         6. Allergene + Ernährungshinweise
-
-       item-header-Div mit flexbox entfernt — das hatte
-       den Preis visuell neben den Namen gedrückt.
+       MENÜKARTEN  —  Bild → Name → Preis → Beschreibung → Meta
     ============================================================ */
     .menu-list {
       list-style: none;
@@ -454,12 +465,11 @@
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 8px;
-      overflow: hidden;   /* Bild füllt Karte bis Rand */
+      overflow: hidden;
     }
 
     [data-theme="high-contrast"] .menu-card { border-width: 2px; }
 
-    /* Gerichtbild — volle Breite oben auf der Karte */
     .dish-img {
       width: 100%;
       height: 200px;
@@ -467,10 +477,9 @@
       display: block;
     }
 
-    /* Inhalt unter dem Bild */
-    .card-body {
-      padding: 1.125rem 1.25rem 1.25rem;
-    }
+    @media (max-width: 480px) { .dish-img { height: 160px; } }
+
+    .card-body { padding: 1.125rem 1.25rem 1.25rem; }
 
     .item-name {
       font-weight: 700;
@@ -482,24 +491,14 @@
 
     [data-theme="high-contrast"] .item-name { color: #FFFFFF; }
 
-    /* Preis direkt unter dem Namen, eigene Zeile
-       aria-label schreibt den Betrag aus, damit Screenreader
-       nicht "Euro Komma 50" vorliest */
     .item-price {
       font-weight: 700;
       font-size: 1rem;
-      color: var(--accent);   /* jetzt 9.5:1 auf --surface ✓ */
-      margin-bottom: 0.35rem;
+      color: var(--accent);
+      margin-bottom: 0.6rem;
     }
 
     [data-theme="high-contrast"] .item-price { color: var(--accent); }
-
-    .item-subtitle {
-      font-size: 0.8125rem;
-      color: var(--text-muted);   /* jetzt 11:1 ✓ */
-      font-style: italic;
-      margin-bottom: 0.4rem;
-    }
 
     .item-description {
       font-size: 0.9rem;
@@ -518,8 +517,6 @@
 
     [data-theme="high-contrast"] .item-meta { border-color: rgba(255,255,255,0.3); }
 
-    /* Vollständige Allergennamen als Text — keine Abkürzungen allein
-       (WCAG 3.1.4 AAA: Abkürzungen müssen aufgelöst sein) */
     .item-allergens,
     .item-dietary {
       font-size: 0.8125rem;
@@ -536,7 +533,6 @@
       margin-right: 0.35rem;
     }
 
-    /* Nur Text — keine Symbole oder Emoji (WCAG 1.1.1, 1.4.1) */
     .dietary-badges { display: inline-flex; flex-wrap: wrap; gap: 0.3rem; }
 
     .badge {
@@ -549,9 +545,9 @@
       color: var(--badge-text);
     }
 
-    .badge-vegan       { background: var(--vegan-bg); }
-    .badge-vegetarian  { background: var(--veg-bg); }
-    .badge-gf          { background: var(--gf-bg); }
+    .badge-vegan      { background: var(--vegan-bg); }
+    .badge-vegetarian { background: var(--veg-bg); }
+    .badge-gf         { background: var(--gf-bg); }
 
     .no-results {
       text-align: center;
@@ -581,8 +577,6 @@
 
     [data-theme="high-contrast"] .footer-h { color: #FFFFFF; }
 
-    /* Definitionsliste für Allergen-Legende:
-       <dt> = Abkürzung, <dd> = vollständiger Name (WCAG 3.1.4 AAA) */
     .allergen-dl {
       display: grid;
       grid-template-columns: auto 1fr;
@@ -645,229 +639,116 @@
     }
 
     /* ============================================================
-       SCHWEBENDE STEUERUNGSLEISTE (Kontrast + Schriftgrösse)
-       Fixiert unten rechts — immer sichtbar beim Scrollen
-    ============================================================ */
-    .float-controls {
-      position: fixed;
-      bottom: 5.5rem;
-      right: 1rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      z-index: 200;
-    }
-
-    .float-btn {
-      background: var(--primary);
-      color: #fff;
-      border: none;
-      border-radius: 100px;
-      padding: 0.625rem 1rem;
-      font-family: inherit;
-      font-size: 0.875rem;
-      font-weight: 700;
-      min-width: 44px;
-      min-height: 44px;
-      cursor: pointer;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
-      white-space: nowrap;
-      transition: background 0.15s ease;
-    }
-
-    .float-btn:hover { background: var(--primary-mid); }
-
-    .float-btn[aria-pressed="true"] {
-      background: var(--accent);
-    }
-
-    [data-theme="high-contrast"] .float-btn {
-      background: #FFD700;
-      color: #000;
-      border: 2px solid #000;
-    }
-
-    [data-theme="high-contrast"] .float-btn[aria-pressed="true"] {
-      background: #FFFFFF;
-      color: #000;
-    }
-
-    /* Schwebendes Nach-oben-Link */
-    .float-top {
-      position: fixed;
-      bottom: 1.5rem;
-      right: 1rem;
-      background: var(--primary);
-      color: #fff;
-      font-size: 0.875rem;
-      font-weight: 700;
-      padding: 0.625rem 1rem;
-      border-radius: 100px;
-      text-decoration: none;
-      min-width: 44px;
-      min-height: 44px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-      z-index: 200;
-    }
-
-    [data-theme="high-contrast"] .float-top {
-      background: #FFD700;
-      color: #000;
-    }
-
-    /* ============================================================
        RESPONSIVE
     ============================================================ */
     @media (max-width: 600px) {
-      .header-inner  { flex-direction: column; gap: 1.25rem; }
-      .filter-rows   { flex-direction: column; }
-      .filter-group  { min-width: 0; }
-      .a11y-controls { gap: 0.75rem; }
-      .dish-img      { height: 160px; }
+      .filter-rows  { flex-direction: column; }
+      .filter-group { min-width: 0; }
     }
 
     @media print {
       .skip-link, .a11y-controls, .filter-panel,
-      .jump-nav, .a11y-notice, .float-controls, .float-top { display: none; }
+      .jump-nav, .a11y-notice { display: none; }
     }
   </style>
 </head>
 
 <body>
 
-  <!-- Sprunglink: erstes fokussierbares Element der Seite -->
-  <a class="skip-link" href="#hauptinhalt"
-     accesskey="s" aria-keyshortcuts="Alt+s">
-    Zum Hauptinhalt springen
-  </a>
+  <a class="skip-link" href="#hauptinhalt">Zum Hauptinhalt springen</a>
 
-  <!-- Barrierefreiheitshinweis -->
   <div class="a11y-notice" role="region" aria-label="Barrierefreiheit">
     WCAG 2.2 AAA — Optimiert für VoiceOver und TalkBack.
-    Tab-Taste zur Navigation · Tastaturkürzel unten.
   </div>
 
-  <!-- KOPFBEREICH -->
-  <header class="site-header">
+  <!-- ============================================================
+       HAUPTHEADER
+       Standard:  Logo | [Restaurantname + Adresse]
+                        [Kontrast- und Schriftsteuerung]
+       Kompakt:   Logo | [Kontrast- und Schriftsteuerung]
+       JS fügt .is-compact beim Scrollen hinzu/entfernt es.
+  ============================================================ -->
+  <header class="site-header" id="site-header">
     <div class="header-inner">
 
-      <div>
-        <h1 class="brand-name">Zur Goldenen Gabel</h1>
-        <p class="brand-tag">Wiener Küche</p>
-        <address class="brand-address">
-          Spittelberggasse 12, 1070 Wien ·
-          <a href="tel:+431234567890">+43 1 234 567</a>
-        </address>
-      </div>
+      <!-- Logo: aria-label="Home" → VoiceOver liest "Home, Link" -->
+      <a href="#hauptinhalt"
+         class="header-logo"
+         aria-label="Home">
+        <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=80&h=80&fit=crop&crop=center"
+             alt=""
+             width="56"
+             height="56">
+      </a>
 
-      <!-- Nur Kontrast + Schriftgrösse — Sprachauswahl entfernt -->
-      <div class="a11y-controls"
-           role="group"
-           aria-label="Zugänglichkeitseinstellungen">
+      <!-- Rechte Spalte: Restaurantname + Steuerung -->
+      <div class="header-right">
 
-        <div class="ctrl-group">
-          <span class="ctrl-label">Kontrast</span>
-          <button class="btn-ctrl"
-                  id="btn-contrast"
-                  aria-pressed="false"
-                  aria-label="Hohen Kontrast aktivieren"
-                  accesskey="c"
-                  aria-keyshortcuts="Alt+c"
-                  onclick="toggleContrast()">
-            Kontrast
-          </button>
+        <!-- Wird im Kompakt-Modus ausgeblendet -->
+        <div class="brand-text" id="brand-text">
+          <h1 class="brand-name">Zur Goldenen Gabel</h1>
+          <p class="brand-tag">Wiener Küche</p>
+          <address class="brand-address">
+            Spittelberggasse 12, 1070 Wien ·
+            <a href="tel:+431234567890">+43 1 234 567</a>
+          </address>
         </div>
 
-        <div class="ctrl-group">
-          <span class="ctrl-label">Schriftgrösse</span>
-          <div class="ctrl-row"
-               role="group"
-               aria-label="Schriftgrösse wählen">
-            <button class="btn-ctrl" id="btn-size-medium"
-                    aria-pressed="true"
-                    aria-label="Normale Schrift"
-                    onclick="setSize('medium')">A</button>
-            <button class="btn-ctrl" id="btn-size-large"
+        <!-- Steuerung bleibt immer sichtbar -->
+        <div class="a11y-controls"
+             role="group"
+             aria-label="Zugänglichkeitseinstellungen">
+
+          <div class="ctrl-group">
+            <span class="ctrl-label">Kontrast</span>
+            <button class="btn-ctrl"
+                    id="btn-contrast"
                     aria-pressed="false"
-                    aria-label="Grosse Schrift"
-                    onclick="setSize('large')"
-                    style="font-size:1.15rem">A</button>
-            <button class="btn-ctrl" id="btn-size-xlarge"
-                    aria-pressed="false"
-                    aria-label="Sehr grosse Schrift"
-                    onclick="setSize('xlarge')"
-                    style="font-size:1.4rem">A</button>
+                    aria-label="Hohen Kontrast aktivieren"
+                    onclick="toggleContrast()">
+              <svg class="contrast-icon" viewBox="0 0 16 16"
+                   aria-hidden="true" focusable="false">
+                <circle cx="8" cy="8" r="7" fill="none"
+                        stroke="currentColor" stroke-width="1.5"/>
+                <path d="M8 1 A7 7 0 0 1 8 15 Z" fill="currentColor"/>
+              </svg>
+              Kontrast
+            </button>
           </div>
-        </div>
 
+          <div class="ctrl-group">
+            <span class="ctrl-label">Schriftgrösse</span>
+            <div class="ctrl-row"
+                 role="group"
+                 aria-label="Schriftgrösse wählen">
+              <button class="btn-ctrl"
+                      id="btn-size-medium"
+                      aria-pressed="true"
+                      aria-label="Normale Schrift — 16 px (100%)"
+                      onclick="setSize('medium')">
+                <span class="size-a-normal">A</span>
+              </button>
+              <button class="btn-ctrl"
+                      id="btn-size-large"
+                      aria-pressed="false"
+                      aria-label="Grosse Schrift — 20 px (125%)"
+                      onclick="setSize('large')">
+                <span class="size-a-large">A</span>
+              </button>
+              <button class="btn-ctrl"
+                      id="btn-size-xlarge"
+                      aria-pressed="false"
+                      aria-label="Sehr grosse Schrift — 32 px (200%)"
+                      onclick="setSize('xlarge')">
+                <span class="size-a-xlarge">A</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
       </div>
     </div>
   </header>
-
-  <!-- Tastaturkürzel-Übersicht -->
-  <div style="background:var(--surface); border-bottom:1px solid var(--border);">
-    <details>
-      <summary style="max-width:880px; margin:0 auto; padding:0.625rem 1rem;
-                      font-size:0.8125rem; color:var(--text-muted); cursor:pointer;
-                      list-style:none; display:flex; align-items:center;
-                      gap:0.5rem; min-height:44px;"
-               aria-label="Tastaturkürzel anzeigen">
-        Tastaturkürzel
-        <span style="margin-left:auto; font-size:0.75rem; opacity:0.7;">
-          (Mac: Ctrl+Opt+Taste · Windows: Alt+Taste)
-        </span>
-      </summary>
-      <div style="max-width:880px; margin:0 auto; padding:0 1rem 1rem;
-                  display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
-                  gap:0.375rem 1rem; font-size:0.8125rem;" role="list">
-        <div role="listitem" style="display:flex; gap:0.5rem; align-items:baseline;">
-          <kbd style="font-family:monospace; font-size:0.75rem; font-weight:700;
-                      background:var(--surface-2); border:1px solid var(--border);
-                      border-radius:3px; padding:0.1rem 0.4rem; flex-shrink:0;">S</kbd>
-          <span>Zum Hauptinhalt</span>
-        </div>
-        <div role="listitem" style="display:flex; gap:0.5rem; align-items:baseline;">
-          <kbd style="font-family:monospace; font-size:0.75rem; font-weight:700;
-                      background:var(--surface-2); border:1px solid var(--border);
-                      border-radius:3px; padding:0.1rem 0.4rem; flex-shrink:0;">1</kbd>
-          <span>Vorspeisen</span>
-        </div>
-        <div role="listitem" style="display:flex; gap:0.5rem; align-items:baseline;">
-          <kbd style="font-family:monospace; font-size:0.75rem; font-weight:700;
-                      background:var(--surface-2); border:1px solid var(--border);
-                      border-radius:3px; padding:0.1rem 0.4rem; flex-shrink:0;">2</kbd>
-          <span>Hauptgerichte</span>
-        </div>
-        <div role="listitem" style="display:flex; gap:0.5rem; align-items:baseline;">
-          <kbd style="font-family:monospace; font-size:0.75rem; font-weight:700;
-                      background:var(--surface-2); border:1px solid var(--border);
-                      border-radius:3px; padding:0.1rem 0.4rem; flex-shrink:0;">3</kbd>
-          <span>Desserts</span>
-        </div>
-        <div role="listitem" style="display:flex; gap:0.5rem; align-items:baseline;">
-          <kbd style="font-family:monospace; font-size:0.75rem; font-weight:700;
-                      background:var(--surface-2); border:1px solid var(--border);
-                      border-radius:3px; padding:0.1rem 0.4rem; flex-shrink:0;">4</kbd>
-          <span>Getränke</span>
-        </div>
-        <div role="listitem" style="display:flex; gap:0.5rem; align-items:baseline;">
-          <kbd style="font-family:monospace; font-size:0.75rem; font-weight:700;
-                      background:var(--surface-2); border:1px solid var(--border);
-                      border-radius:3px; padding:0.1rem 0.4rem; flex-shrink:0;">C</kbd>
-          <span>Kontrast umschalten</span>
-        </div>
-        <div role="listitem" style="display:flex; gap:0.5rem; align-items:baseline;">
-          <kbd style="font-family:monospace; font-size:0.75rem; font-weight:700;
-                      background:var(--surface-2); border:1px solid var(--border);
-                      border-radius:3px; padding:0.1rem 0.4rem; flex-shrink:0;">T</kbd>
-          <span>Nach oben</span>
-        </div>
-      </div>
-    </details>
-  </div>
 
   <!-- HAUPTINHALT -->
   <main id="hauptinhalt">
@@ -875,23 +756,15 @@
 
       <nav class="jump-nav" aria-label="Zu Kategorie springen">
         <a class="jump-link" href="#h-vorspeisen"
-           accesskey="1" aria-keyshortcuts="Alt+1"
            onclick="focusSection('h-vorspeisen')">Vorspeisen</a>
         <a class="jump-link" href="#h-hauptgerichte"
-           accesskey="2" aria-keyshortcuts="Alt+2"
            onclick="focusSection('h-hauptgerichte')">Hauptgerichte</a>
         <a class="jump-link" href="#h-desserts"
-           accesskey="3" aria-keyshortcuts="Alt+3"
            onclick="focusSection('h-desserts')">Desserts</a>
         <a class="jump-link" href="#h-getraenke"
-           accesskey="4" aria-keyshortcuts="Alt+4"
            onclick="focusSection('h-getraenke')">Getränke</a>
       </nav>
 
-      <!-- FILTERBEREICH
-           KORREKTUR: filter-panel-title mit aria-hidden="true" entfernt.
-           Das war der WAVE-Alert: sichtbarer Text für Screenreader
-           versteckt. Jetzt haben die fieldset-Legenden allein die Kontrolle. -->
       <section class="filter-panel" id="filter" aria-label="Menü filtern">
         <div class="filter-rows">
 
@@ -899,23 +772,28 @@
             <legend class="filter-legend">Kategorie</legend>
             <div class="filter-options">
               <label class="filter-option">
-                <input type="radio" name="cat" value="all" checked onchange="applyFilters()">
+                <input type="radio" name="cat" value="all"
+                       checked onchange="applyFilters()">
                 <span class="chip">Alle</span>
               </label>
               <label class="filter-option">
-                <input type="radio" name="cat" value="starters" onchange="applyFilters()">
+                <input type="radio" name="cat" value="starters"
+                       onchange="applyFilters()">
                 <span class="chip">Vorspeisen</span>
               </label>
               <label class="filter-option">
-                <input type="radio" name="cat" value="mains" onchange="applyFilters()">
+                <input type="radio" name="cat" value="mains"
+                       onchange="applyFilters()">
                 <span class="chip">Hauptgerichte</span>
               </label>
               <label class="filter-option">
-                <input type="radio" name="cat" value="desserts" onchange="applyFilters()">
+                <input type="radio" name="cat" value="desserts"
+                       onchange="applyFilters()">
                 <span class="chip">Desserts</span>
               </label>
               <label class="filter-option">
-                <input type="radio" name="cat" value="drinks" onchange="applyFilters()">
+                <input type="radio" name="cat" value="drinks"
+                       onchange="applyFilters()">
                 <span class="chip">Getränke</span>
               </label>
             </div>
@@ -925,15 +803,18 @@
             <legend class="filter-legend">Ernährung</legend>
             <div class="filter-options">
               <label class="filter-option">
-                <input type="checkbox" value="vegetarian" onchange="applyFilters()">
+                <input type="checkbox" value="vegetarian"
+                       onchange="applyFilters()">
                 <span class="chip">Vegetarisch</span>
               </label>
               <label class="filter-option">
-                <input type="checkbox" value="vegan" onchange="applyFilters()">
+                <input type="checkbox" value="vegan"
+                       onchange="applyFilters()">
                 <span class="chip">Vegan</span>
               </label>
               <label class="filter-option">
-                <input type="checkbox" value="gluten-free" onchange="applyFilters()">
+                <input type="checkbox" value="gluten-free"
+                       onchange="applyFilters()">
                 <span class="chip">Glutenfrei</span>
               </label>
             </div>
@@ -943,15 +824,7 @@
         <p class="filter-status" id="filter-status-visible"></p>
       </section>
 
-      <!-- Live-Region für Screenreader-Ankündigungen -->
       <div id="sr-announce" aria-live="polite" aria-atomic="true" class="sr-only"></div>
-
-      <!-- ══════════════════════════════════════════════════════
-           MENÜABSCHNITTE
-           DOM-Reihenfolge pro Karte:
-             1. Bild    2. Name (h3)    3. Preis
-             4. Untertitel    5. Beschreibung    6. Meta
-      ══════════════════════════════════════════════════════ -->
 
       <!-- VORSPEISEN -->
       <section class="menu-section" id="sec-starters"
@@ -967,7 +840,6 @@
               <div class="card-body">
                 <h3 class="item-name" id="n-lks">Leberknödelsuppe</h3>
                 <p class="item-price" aria-label="Preis 7 Euro 50">€ 7,50</p>
-                <p class="item-subtitle">Hausgemachte Spezialität</p>
                 <p class="item-description">
                   Klare Rindsbrühe mit zwei hausgemachten Leberknödeln und frischem Schnittlauch.
                 </p>
@@ -985,11 +857,10 @@
             <article aria-labelledby="n-glf">
               <img class="dish-img"
                    src="https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=600&q=80"
-                   alt="Scheiben geräucherter Lachsforelle auf einem Holzbrett mit Kapern und Zitronenscheiben">
+                   alt="Scheiben geräucherter Lachsforelle auf einem Brett mit Kapern und Zitronenscheiben">
               <div class="card-body">
                 <h3 class="item-name" id="n-glf">Geräucherte Lachsforelle</h3>
                 <p class="item-price" aria-label="Preis 12 Euro">€ 12,00</p>
-                <p class="item-subtitle">Vom Fischmarkt</p>
                 <p class="item-description">
                   Mit Krenrahm, Kapern und Schwarzbrot.
                 </p>
@@ -1003,15 +874,15 @@
             </article>
           </li>
 
-          <li class="menu-card" data-category="starters" data-dietary="vegan vegetarian gluten-free">
+          <li class="menu-card" data-category="starters"
+              data-dietary="vegan vegetarian gluten-free">
             <article aria-labelledby="n-gs">
               <img class="dish-img"
                    src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600&q=80"
-                   alt="Ein grosser gemischter Blattsalat mit Radieschen, Kürbiskernen und einem goldgelben Kürbiskernöl-Dressing">
+                   alt="Ein grosser gemischter Blattsalat mit Radieschen, Kürbiskernen und Kürbiskernöl-Dressing">
               <div class="card-body">
                 <h3 class="item-name" id="n-gs">Gemischter Salat</h3>
                 <p class="item-price" aria-label="Preis 8 Euro 50">€ 8,50</p>
-                <p class="item-subtitle">Saisonal und regional</p>
                 <p class="item-description">
                   Saisonales Blattgemüse mit Kürbiskernöl-Dressing, Radieschen und Kürbiskernen.
                 </p>
@@ -1045,11 +916,10 @@
             <article aria-labelledby="n-ws">
               <img class="dish-img"
                    src="https://images.unsplash.com/photo-1599921841143-819065a55cc6?w=600&q=80"
-                   alt="Ein goldbraun paniertes Wiener Schnitzel auf einem weissen Teller mit Erdäpfelsalat und einer Zitronenscheibe">
+                   alt="Ein goldbraun paniertes Wiener Schnitzel auf einem weissen Teller mit Erdäpfelsalat und Zitronenscheibe">
               <div class="card-body">
                 <h3 class="item-name" id="n-ws">Wiener Schnitzel</h3>
                 <p class="item-price" aria-label="Preis 24 Euro">€ 24,00</p>
-                <p class="item-subtitle">Vom Kalb</p>
                 <p class="item-description">
                   Paniertes Kalbsschnitzel in Butterschmalz gebraten, mit Erdäpfelsalat und Zitrone.
                 </p>
@@ -1067,11 +937,10 @@
             <article aria-labelledby="n-tp">
               <img class="dish-img"
                    src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=600&q=80"
-                   alt="Aufgeschnittenes gekochtes Rindfleisch auf einem Teller mit Rösterdäpfeln und einer kleinen Schüssel Apfelkren">
+                   alt="Aufgeschnittenes gekochtes Rindfleisch auf einem Teller mit Rösterdäpfeln und Apfelkren">
               <div class="card-body">
                 <h3 class="item-name" id="n-tp">Tafelspitz</h3>
                 <p class="item-price" aria-label="Preis 22 Euro">€ 22,00</p>
-                <p class="item-subtitle">Wiener Klassiker</p>
                 <p class="item-description">
                   Gekochtes Rindfleisch mit Apfelkren, Schnittlauchsauce und Rösterdäpfeln.
                 </p>
@@ -1091,15 +960,15 @@
             </article>
           </li>
 
-          <li class="menu-card" data-category="mains" data-dietary="vegan vegetarian">
+          <li class="menu-card" data-category="mains"
+              data-dietary="vegan vegetarian">
             <article aria-labelledby="n-eg">
               <img class="dish-img"
                    src="https://images.unsplash.com/photo-1574484284002-952d92456975?w=600&q=80"
-                   alt="Ein dampfender Topf Erdäpfelgulasch mit Paprikasosse, Kartoffelstücken und frischer Petersilie">
+                   alt="Ein dampfender Topf Erdäpfelgulasch mit Paprikasauce, Kartoffelstücken und frischer Petersilie">
               <div class="card-body">
                 <h3 class="item-name" id="n-eg">Erdäpfelgulasch</h3>
                 <p class="item-price" aria-label="Preis 14 Euro">€ 14,00</p>
-                <p class="item-subtitle">Hausgemacht</p>
                 <p class="item-description">
                   Mit Majoran, Kümmel und Sauerteigbrot. Sauerrahm auf Anfrage erhältlich.
                 </p>
@@ -1112,7 +981,6 @@
                     <span class="meta-label">Ernährung:</span>
                     <span class="dietary-badges">
                       <span class="badge badge-vegan">Vegan</span>
-                      <span class="badge badge-vegetarian">Vegetarisch</span>
                     </span>
                   </p>
                 </div>
@@ -1128,7 +996,6 @@
               <div class="card-body">
                 <h3 class="item-name" id="n-gfor">Gebratene Forelle</h3>
                 <p class="item-price" aria-label="Preis 19 Euro 50">€ 19,50</p>
-                <p class="item-subtitle">Frisch aus der Pfanne</p>
                 <p class="item-description">
                   Mit Kräuterbutter, Petersilerdäpfeln und Gurkenrelish.
                 </p>
@@ -1161,11 +1028,10 @@
             <article aria-labelledby="n-as">
               <img class="dish-img"
                    src="https://images.unsplash.com/photo-1562440499-64c9a111f713?w=600&q=80"
-                   alt="Ein aufgeschnittener Apfelstrudel mit Puderzucker bestäubt, neben einem Krug Vanillesauce auf einem Holztablett">
+                   alt="Ein aufgeschnittener Apfelstrudel mit Puderzucker bestäubt neben einem Krug Vanillesauce">
               <div class="card-body">
                 <h3 class="item-name" id="n-as">Apfelstrudel</h3>
                 <p class="item-price" aria-label="Preis 7 Euro">€ 7,00</p>
-                <p class="item-subtitle">Hausgemacht, nach Grossmutters Rezept</p>
                 <p class="item-description">
                   Mit Vanillesauce und Schlagobers, nach Hausrezept.
                 </p>
@@ -1189,11 +1055,10 @@
             <article aria-labelledby="n-pal">
               <img class="dish-img"
                    src="https://images.unsplash.com/photo-1519676867240-f03562e64548?w=600&q=80"
-                   alt="Gerollte Palatschinken mit Marillenmarmelade auf einem Teller, mit Puderzucker bestreut">
+                   alt="Gerollte Palatschinken mit Marillenmarmelade auf einem Teller mit Puderzucker bestreut">
               <div class="card-body">
                 <h3 class="item-name" id="n-pal">Palatschinken</h3>
                 <p class="item-price" aria-label="Preis 6 Euro 50">€ 6,50</p>
-                <p class="item-subtitle">Pfannkuchen Wiener Art</p>
                 <p class="item-description">
                   Mit Marillenmarmelade gefüllt, mit Puderzucker bestäubt.
                 </p>
@@ -1217,11 +1082,10 @@
             <article aria-labelledby="n-tk">
               <img class="dish-img"
                    src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=600&q=80"
-                   alt="Drei Topfenknödel in Butterbröseln auf einem Teller mit einem Löffel Zwetschkenröster daneben">
+                   alt="Drei Topfenknödel in Butterbröseln auf einem Teller mit Zwetschkenröster">
               <div class="card-body">
                 <h3 class="item-name" id="n-tk">Topfenknödel</h3>
                 <p class="item-price" aria-label="Preis 8 Euro">€ 8,00</p>
-                <p class="item-subtitle">Österreichische Tradition</p>
                 <p class="item-description">
                   Mit Butterbrösel und Zwetschkenröster.
                 </p>
@@ -1250,7 +1114,8 @@
         <h2 class="section-heading" id="h-getraenke">Getränke</h2>
         <ul class="menu-list" role="list">
 
-          <li class="menu-card" data-category="drinks" data-dietary="vegan vegetarian gluten-free">
+          <li class="menu-card" data-category="drinks"
+              data-dietary="vegan vegetarian gluten-free">
             <article aria-labelledby="n-lw">
               <img class="dish-img"
                    src="https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=600&q=80"
@@ -1258,7 +1123,6 @@
               <div class="card-body">
                 <h3 class="item-name" id="n-lw">Leitungswasser</h3>
                 <p class="item-price" aria-label="Kostenlos">kostenlos</p>
-                <p class="item-subtitle">Wiener Trinkwasser</p>
                 <p class="item-description">
                   Frisch gefiltertes Wiener Leitungswasser — selbstverständlich kostenlos.
                 </p>
@@ -1279,15 +1143,15 @@
             </article>
           </li>
 
-          <li class="menu-card" data-category="drinks" data-dietary="vegetarian gluten-free">
+          <li class="menu-card" data-category="drinks"
+              data-dietary="vegetarian gluten-free">
             <article aria-labelledby="n-wm">
               <img class="dish-img"
                    src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600&q=80"
-                   alt="Eine Wiener Melange in einer weissen Porzellantasse mit Untertasse auf einem Marmortisch">
+                   alt="Eine Wiener Melange in einer weissen Porzellantasse auf einem Marmortisch">
               <div class="card-body">
                 <h3 class="item-name" id="n-wm">Wiener Melange</h3>
                 <p class="item-price" aria-label="Preis 3 Euro 80">€ 3,80</p>
-                <p class="item-subtitle">Viennese Coffee</p>
                 <p class="item-description">
                   Espresso mit aufgeschäumter Milch, nach Wiener Tradition.
                 </p>
@@ -1308,17 +1172,17 @@
             </article>
           </li>
 
-          <li class="menu-card" data-category="drinks" data-dietary="vegan vegetarian gluten-free">
+          <li class="menu-card" data-category="drinks"
+              data-dietary="vegan vegetarian gluten-free">
             <article aria-labelledby="n-gv">
               <img class="dish-img"
                    src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=600&q=80"
-                   alt="Ein gefülltes Weisswein-Glas mit strohgelbem Grünem Veltliner, Weingarten im Hintergrund">
+                   alt="Ein gefülltes Weissweinglas mit Grünem Veltliner und Weingarten im Hintergrund">
               <div class="card-body">
-                <h3 class="item-name" id="n-gv">Grüner Veltliner</h3>
+                <h3 class="item-name" id="n-gv">Grüner Veltliner 0,2 l</h3>
                 <p class="item-price" aria-label="Preis 5 Euro 50">€ 5,50</p>
-                <p class="item-subtitle">Weingut Loimer, Kamptal · 0,2 l</p>
                 <p class="item-description">
-                  Fruchtig, mineralisch, trocken.
+                  Weingut Loimer, Kamptal. Fruchtig, mineralisch, trocken.
                 </p>
                 <div class="item-meta">
                   <p class="item-allergens">
@@ -1337,15 +1201,15 @@
             </article>
           </li>
 
-          <li class="menu-card" data-category="drinks" data-dietary="vegan vegetarian">
+          <li class="menu-card" data-category="drinks"
+              data-dietary="vegan vegetarian">
             <article aria-labelledby="n-oh">
               <img class="dish-img"
                    src="https://images.unsplash.com/photo-1535958636474-b021ee887b13?w=600&q=80"
                    alt="Ein frisch gezapftes helles Bier mit weissem Schaum in einem Kruglas auf einem Holztresen">
               <div class="card-body">
-                <h3 class="item-name" id="n-oh">Ottakringer Hell</h3>
+                <h3 class="item-name" id="n-oh">Ottakringer Hell 0,3 l</h3>
                 <p class="item-price" aria-label="Preis 3 Euro 90">€ 3,90</p>
-                <p class="item-subtitle">Wiener Bier · 0,3 l</p>
                 <p class="item-description">
                   Lokales Wiener Bier, hell, frisch gezapft.
                 </p>
@@ -1414,9 +1278,9 @@
       </section>
 
       <p class="footer-note">
-        Bitte informieren Sie unser Personal über Allergien oder besondere Ernährungsbedürfnisse
-        vor der Bestellung. Kreuzkontaminationen in der Küche können nicht vollständig
-        ausgeschlossen werden.
+        Bitte informieren Sie unser Personal über Allergien oder besondere
+        Ernährungsbedürfnisse vor der Bestellung. Kreuzkontaminationen in der Küche
+        können nicht vollständig ausgeschlossen werden.
       </p>
 
       <div class="footer-contact">
@@ -1433,44 +1297,22 @@
     </div>
   </footer>
 
-  <!-- Schwebende Steuerungsleiste -->
-  <div class="float-controls"
-       role="group"
-       aria-label="Schnellzugang Barrierefreiheit">
-    <button class="float-btn"
-            id="float-contrast"
-            aria-pressed="false"
-            aria-label="Hohen Kontrast aktivieren"
-            onclick="toggleContrast()">
-      Kontrast
-    </button>
-    <button class="float-btn"
-            id="float-size-large"
-            aria-pressed="false"
-            aria-label="Grosse Schrift"
-            onclick="setSize('large')">
-      A+
-    </button>
-    <button class="float-btn"
-            id="float-size-medium"
-            aria-pressed="true"
-            aria-label="Normale Schrift"
-            onclick="setSize('medium')">
-      A
-    </button>
-  </div>
-
-  <!-- Schwebendes Nach-oben-Link — kein SVG, nur Text -->
-  <a href="#hauptinhalt"
-     class="float-top"
-     accesskey="t"
-     aria-keyshortcuts="Alt+t"
-     aria-label="Nach oben">
-    Oben
-  </a>
-
   <script>
-    /* Kontrast umschalten */
+    /* ── Header kompakt/voll umschalten beim Scrollen ────────────
+       Schwellenwert: 80px — entspricht etwa der Höhe des
+       Restaurantnamens. Darunter bleibt der Header voll.
+    ─────────────────────────────────────────────────────────── */
+    const header    = document.getElementById('site-header');
+    const THRESHOLD = 80;
+
+    function updateHeader() {
+      header.classList.toggle('is-compact', window.scrollY > THRESHOLD);
+    }
+
+    window.addEventListener('scroll', updateHeader, { passive: true });
+    updateHeader(); // Initialzustand setzen
+
+    /* ── Kontrast ─────────────────────────────────────────────── */
     function toggleContrast() {
       const html = document.documentElement;
       const isHC = html.getAttribute('data-theme') === 'high-contrast';
@@ -1481,33 +1323,29 @@
         ? 'Hohen Kontrast aktivieren'
         : 'Hohen Kontrast deaktivieren';
 
-      ['btn-contrast','float-contrast'].forEach(id => {
-        const b = document.getElementById(id);
-        if (b) {
-          b.setAttribute('aria-pressed', pressed);
-          b.setAttribute('aria-label', label);
-        }
-      });
+      document.getElementById('btn-contrast')
+        ?.setAttribute('aria-pressed', pressed);
+      document.getElementById('btn-contrast')
+        ?.setAttribute('aria-label', label);
+
       announce(isHC ? 'Normaler Kontrast' : 'Hoher Kontrast aktiviert');
     }
 
-    /* Schriftgrösse */
+    /* ── Schriftgrösse ────────────────────────────────────────── */
     function setSize(size) {
       document.documentElement.setAttribute('data-textsize', size);
-      ['medium','large','xlarge'].forEach(s => {
-        ['btn-size-','float-size-'].forEach(prefix => {
-          document.getElementById(prefix + s)
-            ?.setAttribute('aria-pressed', s === size ? 'true' : 'false');
-        });
+      ['medium', 'large', 'xlarge'].forEach(s => {
+        document.getElementById('btn-size-' + s)
+          ?.setAttribute('aria-pressed', s === size ? 'true' : 'false');
       });
       announce({
-        medium: 'Normale Schrift',
-        large:  'Grosse Schrift',
-        xlarge: 'Sehr grosse Schrift'
+        medium: 'Normale Schrift 100 Prozent',
+        large:  'Grosse Schrift 125 Prozent',
+        xlarge: 'Sehr grosse Schrift 200 Prozent'
       }[size] + ' aktiviert');
     }
 
-    /* Roving-Tabindex-Fokus für Sprunglinks */
+    /* ── Roving Tabindex für Sprunglinks ─────────────────────── */
     function focusSection(id) {
       const el = document.getElementById(id);
       if (!el) return;
@@ -1516,7 +1354,7 @@
       el.addEventListener('blur', () => el.removeAttribute('tabindex'), { once: true });
     }
 
-    /* Filter */
+    /* ── Filter ───────────────────────────────────────────────── */
     function applyFilters() {
       const cat = document.querySelector('input[name="cat"]:checked')?.value || 'all';
       const dietary = Array.from(
@@ -1530,7 +1368,8 @@
       cards.forEach(card => {
         const cMatch = cat === 'all' || card.dataset.category === cat;
         const dStr   = card.dataset.dietary || '';
-        const dMatch = dietary.length === 0 || dietary.every(d => dStr.includes(d));
+        const dMatch = dietary.length === 0
+          || dietary.every(d => dStr.includes(d));
         card.hidden = !(cMatch && dMatch);
         if (!card.hidden) count++;
       });
@@ -1549,7 +1388,7 @@
       setTimeout(() => announce(msg), 450);
     }
 
-    /* aria-live Ankündigung */
+    /* ── aria-live Ankündigung ────────────────────────────────── */
     function announce(msg) {
       const el = document.getElementById('sr-announce');
       el.textContent = '';
