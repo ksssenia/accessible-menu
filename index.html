@@ -6,11 +6,12 @@
   <meta name="description" content="Speisekarte – Zur Goldenen Gabel, Wien. Vollständig barrierefrei für Screenreader. Accessible menu for screen readers including VoiceOver and TalkBack.">
   <title>Zur Goldenen Gabel – Speisekarte / Menu</title>
 
-  <!-- Google Fonts: Fraunces (display) + Lora (body) — both WCAG-friendly at all sizes -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-
+  <!-- Google Fonts: Atkinson Hyperlegible (display) + Atkinson Hyperlegible (body) — both WCAG-friendly at all sizes -->
+  <link rel="preconnect" href="https://fonts.google.com/specimen/Atkinson+Hyperlegible?preview.script=Latn">
+  <link rel="preconnect" href="https://fonts.google.com/specimen/Lexend?preview.script=Latn" crossorigin>
+  <!--<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"> -->
+  
+  
   <style>
     /* ======================================================
        DESIGN TOKENS — default (warm Viennese bistro palette)
@@ -19,8 +20,8 @@
       --bg:              #FAF7F0;
       --surface:         #F0EAE0;
       --surface-2:       #E8DFD0;
-      --primary:         #1C3A2A;
-      --primary-mid:     #2B5A40;
+      --primary:         #12261B;
+      --primary-mid:     #204330;
       --accent:          #AD7B28;
       --text:            #1A1A1A;
       --text-muted:      #5C5752;
@@ -88,7 +89,7 @@
     [hidden] { display: none !important; }
 
     body {
-      font-family: 'Lora', Georgia, serif;
+      font-family: 'Atkinson Hyperlegible', Verdana, serif;
       font-size: 1rem;       /* scales with :root font-size */
       line-height: 1.65;
       background: var(--bg);
@@ -144,6 +145,11 @@
       padding: 1.5rem 1rem 1.75rem;
     }
 
+    [data-theme="high-contrast"] .site-header {
+      background: #000000;
+      border-bottom: 2px solid #FFD700;
+    }
+
     .header-inner {
       max-width: 880px;
       margin: 0 auto;
@@ -155,7 +161,7 @@
     }
 
     .brand-name {
-      font-family: 'Fraunces', Georgia, serif;
+      font-family: 'Atkinson Hyperlegible', Verdana, serif;
       font-weight: 300;
       font-size: clamp(1.75rem, 5vw, 2.6rem);
       letter-spacing: 0.02em;
@@ -217,7 +223,7 @@
       background: rgba(255,255,255,0.12);
       border: 1.5px solid rgba(255,255,255,0.25);
       color: #fff;
-      font-family: 'Lora', Georgia, serif;
+      font-family: 'Atkinson Hyperlegible', Verdana, serif;
       font-size: 0.875rem;
       padding: 0.5rem 0.875rem;
       min-width: 44px;
@@ -246,8 +252,28 @@
 
     [data-theme="high-contrast"] .btn-ctrl[aria-pressed="true"] {
       background: #FFD700;
-      color: #000;
+      color: #010101;
       border-color: #FFD700;
+    }
+    
+    .float-top {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      background: var(--primary);
+      color: #fff;
+      font-size: 0.875rem;
+      font-weight: 700;
+      padding: 0.625rem 1rem;
+      border-radius: 100px;
+      text-decoration: none;
+      min-width: 44px;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      z-index: 100;
     }
 
     /* ======================================================
@@ -445,13 +471,17 @@
     }
 
     .section-heading {
-      font-family: 'Fraunces', Georgia, serif;
+      font-family: 'Atkinson Hyperlegible', Verdana, serif;
       font-weight: 300;
       font-size: clamp(1.3rem, 3.5vw, 1.75rem);
       color: var(--primary);
       border-bottom: 2px solid var(--accent);
       padding-bottom: 0.5rem;
       margin-bottom: 1.25rem;
+      scroll-margin-top: 80px;
+    }
+    .main-wrap {
+      padding-bottom: 8rem;
     }
 
     [data-theme="high-contrast"] .section-heading {
@@ -496,7 +526,7 @@
     }
 
     .item-name {
-      font-family: 'Fraunces', Georgia, serif;
+      font-family: 'Atkinson Hyperlegible', Verdana, serif;
       font-weight: 600;
       font-size: 1.125rem;
       color: var(--primary);
@@ -506,7 +536,7 @@
     [data-theme="high-contrast"] .item-name { color: #FFFFFF; }
 
     .item-price {
-      font-family: 'Fraunces', Georgia, serif;
+      font-family: 'Atkinson Hyperlegible', Verdana, serif;
       font-weight: 600;
       font-size: 1.0625rem;
       color: var(--accent);
@@ -570,7 +600,7 @@
       letter-spacing: 0.05em;
       padding: 0.2rem 0.5rem;
       border-radius: 4px;
-      font-family: 'Lora', serif;
+      font-family: 'Atkinson Hyperlegible', serif;
     }
 
     .allergen-none-text {
@@ -632,7 +662,7 @@
     }
 
     .footer-section-title {
-      font-family: 'Fraunces', Georgia, serif;
+      font-family: 'Atkinson Hyperlegible', Verdana, serif;
       font-weight: 600;
       font-size: 1.1rem;
       color: var(--primary);
@@ -869,7 +899,7 @@
       <!-- Section jump nav — lets keyboard & screen reader
            users skip directly to a menu category. -->
       <nav class="jump-nav" aria-label="Zu Kategorie springen / Jump to category">
-        <span class="jump-nav-label" aria-hidden="true">↓</span>
+        <span class="jump-nav-label" aria-hidden="true"> Abschnitte: </span>
         <a class="jump-link" href="#sec-starters">Vorspeisen / Starters</a>
         <a class="jump-link" href="#sec-mains">Hauptgerichte / Mains</a>
         <a class="jump-link" href="#sec-desserts">Desserts</a>
@@ -936,7 +966,7 @@
                 <input type="checkbox" value="vegetarian"
                        onchange="applyFilters()">
                 <span class="chip">
-                  <span aria-hidden="true">🥗</span>
+                  <!-- <span aria-hidden="true">🥗</span> -->
                   Vegetarisch / Vegetarian
                 </span>
               </label>
@@ -945,7 +975,7 @@
                 <input type="checkbox" value="vegan"
                        onchange="applyFilters()">
                 <span class="chip">
-                  <span aria-hidden="true">🌱</span>
+                 <!-- <span aria-hidden="true">🌱</span> -->
                   Vegan
                 </span>
               </label>
@@ -954,7 +984,7 @@
                 <input type="checkbox" value="gluten-free"
                        onchange="applyFilters()">
                 <span class="chip">
-                  <span aria-hidden="true">🌾</span>
+                 <!-- <span aria-hidden="true">🌾</span> -->
                   Glutenfrei / Gluten-free
                 </span>
               </label>
@@ -1008,11 +1038,16 @@
               data-category="starters"
               data-dietary="">
             <article aria-labelledby="n-lks">
-              <div class="item-header">
-                <h3 class="item-name" id="n-lks">Leberknödelsuppe</h3>
-                <span class="item-price"
-                      aria-label="Preis: 7 Euro 50 / Price: 7 euros 50">€ 7,50</span>
-              </div>
+              <img src="https://images.services.kitchenstories.io/nv4QwM7w5bUbm2QdpvETkpyBecE=/3840x0/filters:quality(85)/images.kitchenstories.io/wagtailOriginalImages/R3266_das_beste_wiener_schnitzel.jpg"
+                    alt="A golden breaded veal escalope on a white plate with potato salad and a lemon wedge"
+                    width="100"
+                    height="80"
+                    style="display:block; width:20%; height:auto; border-radius:6px; margin-bottom:0.75rem;">
+              <h3 class="item-name" id="n-lks">Leberknödelsuppe</h3>
+              <span class="item-price"
+                    aria-label="Preis: 7 Euro 50 / Price: 7 euros 50">€ 7,50</span>
+              
+            
               <p class="item-subtitle">Liver dumpling soup</p>
               <p class="item-description">
                 Klare Rindsbrühe mit zwei hausgemachten Leberknödeln und frischem Schnittlauch. /
@@ -1097,11 +1132,11 @@
                 </div>
                 <div class="dietary-block" aria-label="Ernährungshinweise / Dietary: Vegan, Glutenfrei / Gluten-free">
                   <span class="badge-dietary badge-vegan">
-                    <span aria-hidden="true">🌱</span> Vegan
+                    <!-- <span aria-hidden="true">🌱</span> --> Vegan 
                   </span>
                   <span class="badge-dietary badge-gluten-free">
-                    <span aria-hidden="true">🌾</span> GF
-                  </span>
+                   <!-- <span aria-hidden="true">🌾</span> --> GF
+                  </span> 
                 </div>
               </div>
             </article>
@@ -1179,7 +1214,7 @@
                 </div>
                 <div class="dietary-block" aria-label="Ernährungshinweise / Dietary: Glutenfrei / Gluten-free">
                   <span class="badge-dietary badge-gluten-free">
-                    <span aria-hidden="true">🌾</span> GF
+                    <!-- <span aria-hidden="true">🌾</span> --> GF
                   </span>
                 </div>
               </div>
@@ -1215,10 +1250,10 @@
                 </div>
                 <div class="dietary-block" aria-label="Ernährungshinweise / Dietary: Vegan, Vegetarisch / Vegetarian">
                   <span class="badge-dietary badge-vegan">
-                    <span aria-hidden="true">🌱</span> Vegan
+                    <!-- <span aria-hidden="true">🌱</span> --> Vegan
                   </span>
                   <span class="badge-dietary badge-vegetarian">
-                    <span aria-hidden="true">🥗</span> VE
+                    <!-- <span aria-hidden="true">🥗</span> --> VE
                   </span>
                 </div>
               </div>
@@ -1253,7 +1288,7 @@
                 </div>
                 <div class="dietary-block" aria-label="Ernährungshinweise / Dietary: Glutenfrei / Gluten-free">
                   <span class="badge-dietary badge-gluten-free">
-                    <span aria-hidden="true">🌾</span> GF
+                   <!-- <span aria-hidden="true">🌾</span> --> GF
                   </span>
                 </div>
               </div>
@@ -1302,7 +1337,7 @@
                 </div>
                 <div class="dietary-block" aria-label="Ernährungshinweise / Dietary: Vegetarisch / Vegetarian">
                   <span class="badge-dietary badge-vegetarian">
-                    <span aria-hidden="true">🥗</span> VE
+                    <!-- <span aria-hidden="true">🥗</span> --> VE
                   </span>
                 </div>
               </div>
@@ -1338,7 +1373,7 @@
                 </div>
                 <div class="dietary-block" aria-label="Ernährungshinweise / Dietary: Vegetarisch / Vegetarian">
                   <span class="badge-dietary badge-vegetarian">
-                    <span aria-hidden="true">🥗</span> VE
+                    <!-- <span aria-hidden="true">🥗</span> --> VE
                   </span>
                 </div>
               </div>
@@ -1374,7 +1409,7 @@
                 </div>
                 <div class="dietary-block" aria-label="Ernährungshinweise / Dietary: Vegetarisch / Vegetarian">
                   <span class="badge-dietary badge-vegetarian">
-                    <span aria-hidden="true">🥗</span> VE
+                    <!-- <span aria-hidden="true">🥗</span> --> VE
                   </span>
                 </div>
               </div>
@@ -1417,10 +1452,10 @@
                 </div>
                 <div class="dietary-block" aria-label="Ernährungshinweise / Dietary: Vegan, Glutenfrei / Gluten-free">
                   <span class="badge-dietary badge-vegan">
-                    <span aria-hidden="true">🌱</span> Vegan
+                    <!-- <span aria-hidden="true">🌱</span>--> Vegan
                   </span>
                   <span class="badge-dietary badge-gluten-free">
-                    <span aria-hidden="true">🌾</span> GF
+                    <!-- <span aria-hidden="true">🌾</span> --> GF
                   </span>
                 </div>
               </div>
@@ -1452,10 +1487,10 @@
                 </div>
                 <div class="dietary-block" aria-label="Ernährungshinweise / Dietary: Vegetarisch / Vegetarian, Glutenfrei / Gluten-free">
                   <span class="badge-dietary badge-vegetarian">
-                    <span aria-hidden="true">🥗</span> VE
+                    <!-- <span aria-hidden="true">🥗</span> --> VE
                   </span>
                   <span class="badge-dietary badge-gluten-free">
-                    <span aria-hidden="true">🌾</span> GF
+                    <!-- <span aria-hidden="true">🌾</span> --> GF
                   </span>
                 </div>
               </div>
@@ -1487,10 +1522,10 @@
                 </div>
                 <div class="dietary-block" aria-label="Ernährungshinweise / Dietary: Vegan, Glutenfrei / Gluten-free">
                   <span class="badge-dietary badge-vegan">
-                    <span aria-hidden="true">🌱</span> Vegan
+                    <!-- <span aria-hidden="true">🌱</span> --> Vegan
                   </span>
                   <span class="badge-dietary badge-gluten-free">
-                    <span aria-hidden="true">🌾</span> GF
+                    <!-- <span aria-hidden="true">🌾</span> --> GF
                   </span>
                 </div>
               </div>
@@ -1522,7 +1557,7 @@
                 </div>
                 <div class="dietary-block" aria-label="Ernährungshinweise / Dietary: Vegan">
                   <span class="badge-dietary badge-vegan">
-                    <span aria-hidden="true">🌱</span> Vegan
+                    <!-- <span aria-hidden="true">🌱</span> --> Vegan
                   </span>
                 </div>
               </div>
@@ -1621,15 +1656,15 @@
         </h2>
         <div class="dietary-legend-grid">
           <div class="dietary-legend-row">
-            <span class="badge-dietary badge-vegan" aria-hidden="true">🌱 Vegan</span>
+            <span class="badge-dietary badge-vegan" aria-hidden="true">Vegan</span>
             <span>Vegan</span>
           </div>
           <div class="dietary-legend-row">
-            <span class="badge-dietary badge-vegetarian" aria-hidden="true">🥗 VE</span>
+            <span class="badge-dietary badge-vegetarian" aria-hidden="true">VE</span>
             <span>Vegetarisch / Vegetarian</span>
           </div>
           <div class="dietary-legend-row">
-            <span class="badge-dietary badge-gluten-free" aria-hidden="true">🌾 GF</span>
+            <span class="badge-dietary badge-gluten-free" aria-hidden="true">GF</span>
             <span>Glutenfrei / Gluten-free</span>
           </div>
         </div>
@@ -1781,5 +1816,13 @@
     if (document.readyState !== 'loading') applyFilters();
   </script>
 
+
+  <a href="#main-content"
+   class="float-top"
+   accesskey="t"
+   aria-label="Back to top / Nach oben">
+  Top
+</a>
+  
 </body>
 </html>
