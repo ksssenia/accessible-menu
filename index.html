@@ -44,7 +44,19 @@
       --gf-bg:        #CC7700;
       --badge-text:   #000000;
     }
+    /* Prevent images and media overflowing their container at any zoom level */
+    img, video, iframe, canvas, svg {
+      max-width: 100%;
+      height: auto;
+    }
+    
+    /* Prevent long words or URLs from overflowing off screen */
+    * {
+      overflow-wrap: break-word;
+    }
 
+    
+    
     /* Normal 16px (100%) · Gross 20px (125%) · Sehr gross 32px (200%) */
     [data-textsize="medium"] { font-size: 16px; }
     [data-textsize="large"]  { font-size: 20px; }
@@ -246,7 +258,9 @@
       font-weight: 600;
     }
 
-    .ctrl-row { display: flex; gap: 0.25rem; }
+    .ctrl-row { display: flex;
+               flex-wrap: wrap;
+               gap: 0.25rem; }
 
     .btn-ctrl {
       background: rgba(255,255,255,0.12);
@@ -1302,6 +1316,22 @@
   </footer>
 
   <script>
+   /* Pinch-to-zoom reflow — Visual Viewport API
+   When user zooms in, page width is set to the visual
+   viewport width so content wraps instead of overflowing */
+    if (window.visualViewport) {
+      function applyZoomReflow() {
+        const vv = window.visualViewport;
+        if (vv.scale > 1.01) {
+          document.documentElement.style.width = Math.floor(vv.width) + 'px';
+        } else {
+          document.documentElement.style.width = '';
+        }
+      }
+      window.visualViewport.addEventListener('resize', applyZoomReflow);
+      applyZoomReflow();
+    }
+    
     /* ── Header kompakt/voll umschalten beim Scrollen ────────────
        Schwellenwert: 80px — entspricht etwa der Höhe des
        Restaurantnamens. Darunter bleibt der Header voll.
