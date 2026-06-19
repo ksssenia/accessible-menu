@@ -1396,7 +1396,7 @@
       header.classList.toggle('is-compact', window.scrollY > THRESHOLD);
     }
 
-    const NTFY_TOPIC = 'goldenengabel-tisch7-mx29'; // dein eindeutiger Themenname
+    const NTFY_TOPIC = 'goldenengabel-tisch7'; 
 
     async function callStaff() {
       const btn = document.getElementById('btn-call-staff');
@@ -1410,7 +1410,7 @@
       announce('Personal wurde benachrichtigt. Ein Mitarbeiter kommt in Kürze zu Ihnen.');
     
       try {
-        await fetch('https://ntfy.sh/' + goldenengabel-tisch7, {
+        await fetch('https://ntfy.sh/' + NTFY_TOPIC, {
           method: 'POST',
           body: 'Ein Gast benötigt Hilfe an der Speisekarte.',
           headers: {
