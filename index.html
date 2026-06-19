@@ -91,6 +91,11 @@
       }
     }
 
+    html, body {
+      overflow-x: hidden;
+      max-width: 100vw;
+    }
+    
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     [hidden] { display: none !important; }
 
@@ -266,22 +271,6 @@
       align-items: flex-start;
     }
    
-    
-    <div class="ctrl-group">
-    <span class="ctrl-label">Service</span>
-    <button class="btn-ctrl btn-call-staff"
-            id="btn-call-staff"
-            aria-label="Personal rufen — Mitarbeiter wird benachrichtigt"
-            onclick="callStaff()">
-      <svg width="14" height="14" viewBox="0 0 16 16"
-           aria-hidden="true" focusable="false">
-        <path d="M8 1.5c-2.5 0-4 2-4 4.5v2.5l-1.2 1.8c-.3.5.1 1.1.7 1.1h9c.6 0 1-.6.7-1.1L12 8.5V6c0-2.5-1.5-4.5-4-4.5z"
-              fill="none" stroke="currentColor" stroke-width="1.3"/>
-        <path d="M6.5 13.5a1.5 1.5 0 0 0 3 0" fill="none" stroke="currentColor" stroke-width="1.3"/>
-      </svg>
-      <span class="btn-call-text">Personal rufen</span>
-    </button>
-    </div>
     
     .ctrl-group {
       display: flex;
@@ -773,6 +762,8 @@
             </button>
           </div>
 
+          
+          
           <div class="ctrl-group">
             <span class="ctrl-label">Schriftgrösse</span>
             <div class="ctrl-row"
@@ -801,6 +792,23 @@
               </button>
             </div>
           </div>
+
+          <div class="ctrl-group">
+            <span class="ctrl-label">Service</span>
+            <button class="btn-ctrl btn-call-staff"
+                    id="btn-call-staff"
+                    aria-label="Personal rufen — Mitarbeiter wird benachrichtigt"
+                    onclick="callStaff()">
+              <svg width="14" height="14" viewBox="0 0 16 16"
+                   aria-hidden="true" focusable="false">
+                <path d="M8 1.5c-2.5 0-4 2-4 4.5v2.5l-1.2 1.8c-.3.5.1 1.1.7 1.1h9c.6 0 1-.6.7-1.1L12 8.5V6c0-2.5-1.5-4.5-4-4.5z"
+                      fill="none" stroke="currentColor" stroke-width="1.3"/>
+                <path d="M6.5 13.5a1.5 1.5 0 0 0 3 0" fill="none" stroke="currentColor" stroke-width="1.3"/>
+              </svg>
+              <span class="btn-call-text">Personal rufen</span>
+            </button>
+          </div>
+          
 
         </div>
       </div>
@@ -1362,12 +1370,18 @@
       function applyZoomReflow() {
         const vv = window.visualViewport;
         if (vv.scale > 1.01) {
-          document.documentElement.style.width = Math.floor(vv.width) + 'px';
+          const w = Math.floor(vv.width);
+          document.documentElement.style.width = w + 'px';
+          document.documentElement.style.marginLeft = 'auto';
+          document.documentElement.style.marginRight = 'auto';
         } else {
           document.documentElement.style.width = '';
+          document.documentElement.style.marginLeft = '';
+          document.documentElement.style.marginRight = '';
         }
       }
       window.visualViewport.addEventListener('resize', applyZoomReflow);
+      window.visualViewport.addEventListener('scroll', applyZoomReflow);
       applyZoomReflow();
     }
     
