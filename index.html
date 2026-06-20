@@ -2,7 +2,7 @@
 <html lang="de" data-theme="default" data-textsize="medium">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5">
   <!-- <meta name="description" content="Speisekarte der Zur Goldenen Gabel, Wien. Vollständig barrierefrei nach WCAG 2.2 AAA. Optimiert für VoiceOver und TalkBack."> -->
   <title>Zur Goldenen Gabel – Speisekarte</title>
 
@@ -93,7 +93,15 @@
 
     html, body {
       overflow-x: hidden;
+      width: 100%;
       max-width: 100vw;
+      position: relative;
+    }
+    
+    .header-inner, .header-right, .a11y-controls, .ctrl-row, .ctrl-group,
+    .filter-rows, .filter-group, .item-meta, .dietary-badges, .jump-nav,
+    .card-body, .menu-card, .footer-inner, .main-wrap {
+      min-width: 0;
     }
     
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -799,12 +807,6 @@
                     id="btn-call-staff"
                     aria-label="Personal rufen — Mitarbeiter wird benachrichtigt"
                     onclick="callStaff()">
-              <svg width="14" height="14" viewBox="0 0 16 16"
-                   aria-hidden="true" focusable="false">
-                <path d="M8 1.5c-2.5 0-4 2-4 4.5v2.5l-1.2 1.8c-.3.5.1 1.1.7 1.1h9c.6 0 1-.6.7-1.1L12 8.5V6c0-2.5-1.5-4.5-4-4.5z"
-                      fill="none" stroke="currentColor" stroke-width="1.3"/>
-                <path d="M6.5 13.5a1.5 1.5 0 0 0 3 0" fill="none" stroke="currentColor" stroke-width="1.3"/>
-              </svg>
               <span class="btn-call-text">Personal rufen</span>
             </button>
           </div>
@@ -1310,25 +1312,6 @@
   <footer class="site-footer">
     <div class="footer-inner">
 
-      <section aria-labelledby="h-allergen-legende">
-        <h2 class="footer-h" id="h-allergen-legende">Allergen-Legende</h2>
-        <dl class="allergen-dl">
-          <dt>GL</dt><dd>Gluten — glutenhaltige Getreide (Weizen, Roggen, Gerste, Hafer)</dd>
-          <dt>EI</dt><dd>Eier</dd>
-          <dt>MI</dt><dd>Milch und Laktose</dd>
-          <dt>FI</dt><dd>Fisch</dd>
-          <dt>KR</dt><dd>Krebstiere</dd>
-          <dt>ER</dt><dd>Erdnüsse</dd>
-          <dt>SO</dt><dd>Soja</dd>
-          <dt>NU</dt><dd>Nüsse (Baumnüsse)</dd>
-          <dt>SE</dt><dd>Sellerie</dd>
-          <dt>SN</dt><dd>Senf</dd>
-          <dt>SS</dt><dd>Sesam</dd>
-          <dt>SW</dt><dd>Schwefeloxide und Sulfite</dd>
-          <dt>LU</dt><dd>Lupinen</dd>
-          <dt>WE</dt><dd>Weichtiere</dd>
-        </dl>
-      </section>
 
       <section aria-labelledby="h-ernaehrungshinweise" style="margin-top:1.75rem">
         <h2 class="footer-h" id="h-ernaehrungshinweise">Ernährungshinweise</h2>
