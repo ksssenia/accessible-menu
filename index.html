@@ -2,7 +2,7 @@
 <html lang="de" data-theme="default" data-textsize="medium">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5, user-scalable=yes">
   <!-- <meta name="description" content="Speisekarte der Zur Goldenen Gabel, Wien. Vollständig barrierefrei nach WCAG 2.2 AAA. Optimiert für VoiceOver und TalkBack."> -->
   <title>Zur Goldenen Gabel – Speisekarte</title>
 
@@ -243,6 +243,7 @@
       opacity: 0;
       transform: translateY(-0.5rem);
       pointer-events: none;
+      visibility: hidden;
     }
 
     .is-compact .header-right { gap: 0; }
@@ -828,7 +829,7 @@
   <main id="hauptinhalt">
     <div class="main-wrap">
 
-     <!-- <nav class="jump-nav" aria-label="Zu Kategorie springen">
+  <nav class="jump-nav" aria-label="Zu Kategorie springen">
         <a class="jump-link" href="#h-vorspeisen"
            onclick="focusSection('h-vorspeisen')">Vorspeisen</a>
         <a class="jump-link" href="#h-hauptgerichte"
@@ -837,7 +838,7 @@
            onclick="focusSection('h-desserts')">Desserts</a>
         <a class="jump-link" href="#h-getraenke"
            onclick="focusSection('h-getraenke')">Getränke</a>
-      </nav> -->
+      </nav>
 
       <section class="filter-panel" id="filter" aria-label="Menü filtern">
         <div class="filter-rows">
