@@ -1463,7 +1463,39 @@
       }, 80);
     }, { passive: true });
 
-    document.addEventListener('gesturestart', event => event.preventDefault(), { passive: false });
+    document.addEventListener('wheel', event => {
+      if (!event.ctrlKey) return;
+
+      event.preventDefault();
+
+      if (!pinchActive) {
+        pinchActive = true;
+        pinchStartZoom = reflowZoom;
+        pinchStartScrollY = window.scrollY;
+        pinchStartViewportY = event.clientY;
+        pinchAnchorViewportY = event.clientY;
+        pinchAnchorElement = document.elementFromPoint(event.clientX, event.clientY);
+        pendingZoom = reflowZoom;
+
+        if (pinchAnchorElement) {
+          const rect = pinchAnchorElement.getBoundingClientRect();
+          pinchAnchorRatio = rect.height > 0
+            ? (event.clientY - rect.top) / rect.height
+            : 0;
+        }
+      }
+
+      pinchAnchorViewportY = event.clientY;
+      pendingZoom *= Math.exp(-event.deltaY * 0.01);
+
+      if (!pinchFrame) {
+        pinchFrame = requestAnimationFrame(() => {
+          pinchFrame = 0;
+          applyReflowZoom(pendingZoom);
+        });
+      }
+
+      clearTimeout(trackpadEndTimer)
 
     /* ── Header kompakt/voll umschalten beim Scrollen ────────────
        Schwellenwert: 80px — entspricht etwa der Höhe des
