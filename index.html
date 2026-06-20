@@ -1358,7 +1358,7 @@
     Максимальниий маштаб приближення сторінки
     Чим більше значення, тим більше можна збільшити сторінку.
     . */
-    const MAX_REFLOW_ZOOM = 2.0;
+    const MAX_REFLOW_ZOOM = 5.0;
 
     let reflowZoom = 1;
     let pinchStartDistance = 0;
@@ -1371,6 +1371,7 @@
     let pinchAnchorViewportY = 0;
     let pinchStartScrollY = 0;
     let pinchStartViewportY = 0;
+    let trackpadEndTimer = 0;
 
     function touchDistance(touches) {
       return Math.hypot(
@@ -1495,7 +1496,18 @@
         });
       }
 
-      clearTimeout(trackpadEndTimer)
+      clearTimeout(trackpadEndTimer);
+      trackpadEndTimer = setTimeout(() => {
+        pinchActive = false;
+        updateHeader();
+        requestAnimationFrame(() => {
+          preservePinchAnchor();
+          pinchAnchorElement = null;
+        });
+      }, 140);
+    }, { passive: false });
+
+    document.addEventListener('gesturestart', event => event.preventDefault(), { passive: false });
 
     /* ── Header kompakt/voll umschalten beim Scrollen ────────────
        Schwellenwert: 80px — entspricht etwa der Höhe des
